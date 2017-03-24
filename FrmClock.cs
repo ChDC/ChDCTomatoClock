@@ -169,6 +169,7 @@ namespace TomatoClock
                 {
                     lblRemain.ForeColor = Color.Red;
                     new ChDCToolsNotice.FrmNotification(this.Icon.ToBitmap(), this.Text, "Only One Minute!").Show();
+                    
                     // downloadBackground
                     new Action<int, int>(downloadBackGround).BeginInvoke(0, 10, null, null);
                 }
@@ -250,25 +251,40 @@ namespace TomatoClock
 
         private void tsmPause_Click(object sender, EventArgs e)
         {
-            if (clock.Enable)
+            if (clock.Enable && canPause())
                 clock.pause();
-            else
+            else if(!clock.Enable)
                 clock.resume();
         }
 
         private void tsmReset_Click(object sender, EventArgs e)
         {
-            clock.start();
+            if(canPause())
+                clock.start();
+        }
+
+        /// <summary>
+        /// 是否可以退出或暂停
+        /// </summary>
+        /// <returns></returns>
+        private bool canPause()
+        {
+            if (clock.IsInTomatoTime && clock.RemainSeconds < 60 || !clock.IsInTomatoTime)
+                return false;
+            else
+                return true;
         }
 
         private void tsmQuit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            if(canPause())
+                Application.Exit();
         }
 
         private void tsmSettings_Click(object sender, EventArgs e)
         {
-            new FrmSettings(clock, this).Show();
+            if(canPause())
+                new FrmSettings(clock, this).Show();
         }
 
         private void FrmClock_FormClosing(object sender, FormClosingEventArgs e)

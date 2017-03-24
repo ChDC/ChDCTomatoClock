@@ -11,6 +11,10 @@ namespace TomatoClock
 
         public BingWallpaper(string url, string title)
         {
+            if (!url.StartsWith("http://"))
+            {
+                url = "http://www.bing.com" + url;
+            }
             this.Url = url;
             this.Title = title;
         }

@@ -26,7 +26,7 @@ namespace TomatoClock
 
             try
             {
-                string bgFile = File.Exists(backgroundFile) ? backgroundFile : "bg.jpg";
+                string bgFile = (backgroundFile != null && File.Exists(backgroundFile)) ? backgroundFile : "bg.jpg";
                 this.BackgroundImage = Image.FromFile(bgFile);
             }
             catch { }
